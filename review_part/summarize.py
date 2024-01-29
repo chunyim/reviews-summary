@@ -1,14 +1,11 @@
 import google.generativeai as palm
 import asyncio
 from pyppeteer import launch
-from . import config
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 API_KEY = os.getenv('API_KEY')
-
-# API_KEY = os.environ.get('API_KEY')
 
 palm.configure(api_key=API_KEY)
 models = [
@@ -68,7 +65,7 @@ async def scrape_reviews(url):
 
 def summarize(reviews, model):
     prompt = "I collected some reviews of a restaurant. \
-    Can you summarize the reviews for me and also give a score out of 5 of the following critera: Food, Service and Atmosphere? \
+    Can you summarize the reviews and also give a score out of 5 of the following critera: Food, Service and Atmosphere? \
     Can you list out what people like and dislike. The reviews are below:\n"
 
     for review in reviews:
