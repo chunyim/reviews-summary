@@ -2,8 +2,15 @@ import google.generativeai as palm
 import asyncio
 from pyppeteer import launch
 from . import config
+from dotenv import load_dotenv
+import os
 
-palm.configure(api_key=config.API_KEY)
+load_dotenv()
+API_KEY = os.getenv('API_KEY')
+
+# API_KEY = os.environ.get('API_KEY')
+
+palm.configure(api_key=API_KEY)
 models = [
     m for m in palm.list_models() if "generateText" in m.supported_generation_methods
 ]
@@ -25,7 +32,6 @@ async def scrape_reviews(url):
     await page.setViewport({"width": 800, "height": 3200})
     await page.goto(url)
     try:
-        # Implement scrolling or additional waiting strategies if needed
         button_selector = 'div.m6QErb.Hk4XGb.QoaCgb.KoSBEe.tLjsW button.M77dve'
         await page.waitForSelector(button_selector)  # Wait for the button to be visible
         button = await page.querySelector(button_selector)
@@ -79,7 +85,3 @@ def summarize(reviews, model):
     return completion.result
 
 
-
-# reviews = asyncio.run(scrape_reviews("https://www.google.com/maps/place/Taro's+Fish/@43.7701904,-79.3746926,17z/data=!4m8!3m7!1s0x89d4d2b678d9c8fd:0xcbe80b54585d5baf!8m2!3d43.7701904!4d-79.3746926!9m1!1b1!16s%2Fg%2F1hc2w4q6x?entry=ttu"))
-
-# print(reviews)
